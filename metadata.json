@@ -1,0 +1,6 @@
+{
+  "name": "La Parrilla 200",
+  "description": "Sistema de punto de venta, control de inventario en tiempo real con descuento de insumos, métodos de pago multimoneda ($ USD, Pago Móvil, Punto de Venta), cierres de caja y tickets térmicos para La Parrilla 200.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
