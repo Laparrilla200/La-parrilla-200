@@ -33,6 +33,7 @@ import com.example.ui.components.ParrillaBottomNavigationBar
 import com.example.ui.components.ParrillaTopAppBar
 import com.example.ui.components.ThermalTicketDialog
 import com.example.ui.screens.AccessDeniedScreen
+import com.example.ui.screens.AiAssistantScreen
 import com.example.ui.screens.AuthScreen
 import com.example.ui.screens.ClosuresScreen
 import com.example.ui.screens.InventoryScreen
@@ -45,6 +46,7 @@ import com.example.ui.theme.CharcoalBlack
 import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.viewmodel.AppScreen
 import com.example.ui.viewmodel.ParrillaViewModel
+import com.example.util.configureAppCheck
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -53,6 +55,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    configureAppCheck(this, intent)
     enableEdgeToEdge()
 
     setContent {
@@ -143,6 +146,7 @@ fun MainContent(viewModel: ParrillaViewModel, onSignOut: () -> Unit) {
         effectiveRole = effectiveRole,
         isActualAdmin = isActualAdmin,
         criticalStockCount = criticalSupplies.size,
+        isAiActive = currentScreen == AppScreen.AI_ASSISTANT,
         onToggleRoleSimulation = {
           if (effectiveRole == UserRole.ADMIN) {
             viewModel.toggleRoleViewMode(UserRole.STAFF)
@@ -151,6 +155,11 @@ fun MainContent(viewModel: ParrillaViewModel, onSignOut: () -> Unit) {
           }
         },
         onNavigateToInventory = { viewModel.setScreen(AppScreen.INVENTORY) },
+        onNavigateToAi = {
+          viewModel.setScreen(
+            if (currentScreen == AppScreen.AI_ASSISTANT) AppScreen.POS else AppScreen.AI_ASSISTANT
+          )
+        },
         onSignOut = onSignOut
       )
     },
@@ -234,6 +243,7 @@ fun MainContent(viewModel: ParrillaViewModel, onSignOut: () -> Unit) {
             )
           }
         }
+        AppScreen.AI_ASSISTANT -> AiAssistantScreen(parrillaViewModel = viewModel)
       }
     }
   }

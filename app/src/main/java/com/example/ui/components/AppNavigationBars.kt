@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -71,8 +72,10 @@ fun ParrillaTopAppBar(
   effectiveRole: UserRole,
   isActualAdmin: Boolean,
   criticalStockCount: Int,
+  isAiActive: Boolean = false,
   onToggleRoleSimulation: () -> Unit,
   onNavigateToInventory: () -> Unit,
+  onNavigateToAi: () -> Unit = {},
   onSignOut: () -> Unit
 ) {
   TopAppBar(
@@ -157,6 +160,20 @@ fun ParrillaTopAppBar(
             )
           }
         }
+      }
+
+      // Botón Asistente Gemini AI
+      IconButton(
+        onClick = onNavigateToAi,
+        modifier = Modifier
+          .size(48.dp)
+          .testTag("ai_assistant_button")
+      ) {
+        Icon(
+          imageVector = Icons.Default.AutoAwesome,
+          contentDescription = "Asistente Gemini AI",
+          tint = if (isAiActive) GrillFireRed else AmberWarning
+        )
       }
 
       // Si es Admin, permitir conmutar vista para probar vista de Cocina/Personal

@@ -39,7 +39,8 @@ enum class AppScreen {
   CLOSURES,
   MENU_ADMIN,
   SETTINGS,
-  PROFILE
+  PROFILE,
+  AI_ASSISTANT
 }
 
 data class RestockItem(
@@ -98,7 +99,7 @@ class ParrillaViewModel(
     val user = _currentLoggedUser.value ?: return false
     if (user.role.equals("ADMIN", ignoreCase = true)) {
       if (_roleViewMode.value == UserRole.STAFF) {
-        return screen in listOf(AppScreen.POS, AppScreen.KITCHEN, AppScreen.PROFILE)
+        return screen in listOf(AppScreen.POS, AppScreen.KITCHEN, AppScreen.PROFILE, AppScreen.AI_ASSISTANT)
       }
       return true
     }
@@ -110,6 +111,7 @@ class ParrillaViewModel(
       AppScreen.MENU_ADMIN -> user.canUseMenuApp
       AppScreen.SETTINGS -> user.canUseSettingsApp
       AppScreen.PROFILE -> true
+      AppScreen.AI_ASSISTANT -> true
     }
   }
 
