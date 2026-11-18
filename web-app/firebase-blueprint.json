@@ -1,0 +1,137 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with role (admin or staff)",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "staff"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["userId", "email", "role"]
+    },
+    "BusinessConfig": {
+      "title": "BusinessConfig",
+      "description": "Global settings for La Parrilla 200",
+      "type": "object",
+      "properties": {
+        "businessName": { "type": "string" },
+        "rif": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "ticketHeader": { "type": "string" },
+        "ticketFooter": { "type": "string" },
+        "printerWidthMm": { "type": "number" },
+        "exchangeRateUsdToBs": { "type": "number" }
+      },
+      "required": ["businessName", "exchangeRateUsdToBs"]
+    },
+    "SupplyItem": {
+      "title": "SupplyItem",
+      "description": "Inventory supply item with real time stock tracking",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "currentStock": { "type": "number" },
+        "minStockThreshold": { "type": "number" },
+        "unit": { "type": "string" },
+        "costUsd": { "type": "number" },
+        "recommendedRestock": { "type": "number" }
+      },
+      "required": ["name", "currentStock", "minStockThreshold", "unit"]
+    },
+    "MenuItem": {
+      "title": "MenuItem",
+      "description": "Food menu dish or beverage with ingredient recipe",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "priceUsd": { "type": "number" },
+        "isAvailable": { "type": "boolean" },
+        "ingredients": { "type": "string" }
+      },
+      "required": ["name", "category", "priceUsd"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order with status and multi-currency payment info",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderNumber": { "type": "number" },
+        "customerName": { "type": "string" },
+        "tableOrDestination": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "status": { "type": "string", "enum": ["EN_COCINA", "LISTO", "ENTREGADO", "CANCELADO"] },
+        "totalUsd": { "type": "number" },
+        "exchangeRate": { "type": "number" },
+        "totalBs": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "amountUsdPaid": { "type": "number" },
+        "amountPagoMovilBs": { "type": "number" },
+        "amountPuntoVentaBs": { "type": "number" },
+        "referenceCode": { "type": "string" },
+        "notes": { "type": "string" },
+        "isPaid": { "type": "boolean" },
+        "createdBy": { "type": "string" },
+        "itemsJson": { "type": "string" }
+      },
+      "required": ["orderNumber", "totalUsd", "status"]
+    },
+    "CashClosure": {
+      "title": "CashClosure",
+      "description": "Cash register closure report",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "closureType": { "type": "string", "enum": ["DIARIO", "SEMANAL", "MENSUAL"] },
+        "closureNumber": { "type": "number" },
+        "timestamp": { "type": "number" },
+        "startDate": { "type": "number" },
+        "endDate": { "type": "number" },
+        "totalSalesUsd": { "type": "number" },
+        "totalSalesBs": { "type": "number" },
+        "totalUsdCash": { "type": "number" },
+        "totalPagoMovilBs": { "type": "number" },
+        "totalPuntoVentaBs": { "type": "number" },
+        "orderCount": { "type": "number" },
+        "closedBy": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["closureType", "totalSalesUsd", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "UserProfile" },
+      "description": "User profiles with role permissions"
+    },
+    "/business/{docId}": {
+      "schema": { "$ref": "BusinessConfig" },
+      "description": "Global business configuration"
+    },
+    "/supplies/{supplyId}": {
+      "schema": { "$ref": "SupplyItem" },
+      "description": "Supplies inventory in real-time"
+    },
+    "/menu/{menuItemId}": {
+      "schema": { "$ref": "MenuItem" },
+      "description": "Dishes and recipes catalog"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "Order" },
+      "description": "Live orders synchronized in real-time"
+    },
+    "/closures/{closureId}": {
+      "schema": { "$ref": "CashClosure" },
+      "description": "Historical cash register closures"
+    }
+  }
+}
